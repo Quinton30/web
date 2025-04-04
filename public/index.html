@@ -3,75 +3,369 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home - Data Management</title>
+    <title>Home | DataMatrix</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                600: '#2563eb',
+                700: '#1d4ed8',
+              },
+              dark: {
+                800: '#1e293b',
+                900: '#0f172a',
+              },
+              accent: {
+                400: '#38bdf8',
+                500: '#0ea5e9',
+              },
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+          },
+        },
+      }
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
-  <body class="bg-gray-100 text-gray-900">
-    <nav
-      class="bg-gray-800 text-white p-4 flex flex-col sm:flex-row justify-between items-center shadow-lg"
-    >
-      <div class="text-xl font-semibold mb-2 sm:mb-0">Data Management</div>
-      <div class="flex flex-wrap justify-center sm:justify-end space-x-4">
-        <a href="index.html" class="hover:text-gray-300 transition">Home</a>
-        <a href="viewdata.html" class="hover:text-gray-300 transition"
+  <body class="bg-dark-900 text-gray-100 font-sans min-h-screen flex flex-col">
+    <!-- Navigation -->
+    <nav class="bg-dark-800 border-b border-gray-700 shadow-xl">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <!-- Brand -->
+          <div class="flex-shrink-0 flex items-center">
+            <svg
+              class="h-8 w-8 text-accent-500 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"
+              />
+            </svg>
+            <span
+              class="text-xl font-bold bg-gradient-to-r from-accent-400 to-primary-600 bg-clip-text text-transparent"
+              >DataMatrix</span
+            >
+          </div>
+
+          <!-- Mobile menu button -->
+          <div class="sm:hidden">
+            <button
+              id="menu-button"
+              class="text-gray-300 hover:text-white focus:outline-none"
+            >
+              <svg
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Desktop Menu -->
+          <div class="hidden sm:flex space-x-4">
+            <a
+              href="index.html"
+              class="px-3 py-2 rounded-md text-sm font-medium bg-gray-700 text-white"
+              >Home</a
+            >
+            <a
+              href="viewdata.html"
+              class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700 transition"
+              >View Data</a
+            >
+            <a
+              href="addnewdata.html"
+              class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700 transition"
+              >Add Data</a
+            >
+            <a
+              href="modifyingdata.html"
+              class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700 transition"
+              >Modify Data</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Menu Items -->
+      <div id="mobile-menu" class="sm:hidden hidden px-2 pt-2 pb-3 space-y-1">
+        <a
+          href="index.html"
+          class="block px-3 py-2 rounded-md text-base font-medium bg-gray-700 text-white"
+          >Home</a
+        >
+        <a
+          href="viewdata.html"
+          class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 transition"
           >View Data</a
         >
-        <a href="addnewdata.html" class="hover:text-gray-300 transition"
-          >Add New Data</a
+        <a
+          href="addnewdata.html"
+          class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 transition"
+          >Add Data</a
         >
-        <a href="modifyingdata.html" class="hover:text-gray-300 transition"
+        <a
+          href="modifyingdata.html"
+          class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 transition"
           >Modify Data</a
         >
       </div>
     </nav>
 
-    <header
-      class="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-16 text-center shadow-md"
-    >
-      <h1 class="text-3xl md:text-4xl font-extrabold">
-        Welcome to the Data Management System
-      </h1>
-      <p class="mt-4 text-base md:text-lg">
-        Effortlessly manage your data with our intuitive interface.
-      </p>
-    </header>
+    <script>
+      const button = document.getElementById('menu-button')
+      const menu = document.getElementById('mobile-menu')
 
-    <div
-      class="container mx-auto mt-8 p-4 md:p-6 bg-white rounded-lg shadow-md"
+      button.addEventListener('click', () => {
+        menu.classList.toggle('hidden')
+      })
+    </script>
+
+    <!-- Hero Section -->
+    <header
+      class="bg-gradient-to-br from-dark-800 to-dark-900 py-16 sm:py-24 px-4 sm:px-6 lg:px-8 text-center"
     >
-      <h2 class="text-xl md:text-2xl font-bold mb-4">Get Started</h2>
-      <p class="text-base md:text-lg text-gray-700">
-        Use the navigation bar above to explore the features of the Data
-        Management System.
-      </p>
-      <div
-        class="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6"
-      >
-        <div
-          class="p-4 bg-gray-50 rounded-lg shadow hover:shadow-lg transition"
+      <div class="max-w-4xl mx-auto">
+        <h1
+          class="text-4xl sm:text-5xl font-bold text-white mb-4 leading-tight"
         >
-          <h3 class="text-lg md:text-xl font-semibold mb-2">View Data</h3>
-          <p class="text-gray-600">
-            Browse and analyze your existing data records.
-          </p>
-        </div>
-        <div
-          class="p-4 bg-gray-50 rounded-lg shadow hover:shadow-lg transition"
-        >
-          <h3 class="text-lg md:text-xl font-semibold mb-2">Add New Data</h3>
-          <p class="text-gray-600">Easily add new entries to your database.</p>
-        </div>
-        <div
-          class="p-4 bg-gray-50 rounded-lg shadow hover:shadow-lg transition"
-        >
-          <h3 class="text-lg md:text-xl font-semibold mb-2">Modify Data</h3>
-          <p class="text-gray-600">Edit or update existing data records.</p>
+          <span
+            class="bg-gradient-to-r from-accent-400 to-primary-600 bg-clip-text text-transparent"
+            >Data Management</span
+          >
+          System
+        </h1>
+        <p class="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto">
+          Advanced data management with real-time analytics and seamless
+          integration
+        </p>
+        <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+          <a
+            href="viewdata.html"
+            class="px-6 py-3 bg-gradient-to-r from-primary-600 to-accent-500 text-white font-medium rounded-lg shadow-lg hover:from-primary-700 hover:to-accent-600 transition-all"
+          >
+            View Dashboard
+          </a>
+          <a
+            href="addnewdata.html"
+            class="px-6 py-3 bg-dark-700 border border-gray-600 text-white font-medium rounded-lg shadow-lg hover:bg-dark-600 transition-all"
+          >
+            Add New Data
+          </a>
         </div>
       </div>
-    </div>
+    </header>
 
-    <footer class="bg-gray-800 text-white text-center py-4 mt-8">
-      <p>&copy; 2025 Data Management System. All rights reserved.</p>
+    <!-- Features Section -->
+    <section class="py-12 sm:py-16 bg-dark-800">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-2xl sm:text-3xl font-bold text-white mb-4">
+            Powerful Data Management
+          </h2>
+          <p class="text-gray-400 max-w-2xl mx-auto">
+            Streamline your workflow with our comprehensive data solutions
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+          <!-- Feature 1 -->
+          <div
+            class="bg-dark-700 border border-gray-700 rounded-xl p-6 sm:p-8 shadow-lg hover:shadow-xl transition-all hover:border-accent-500/30"
+          >
+            <div
+              class="w-12 h-12 bg-dark-600 rounded-lg flex items-center justify-center mb-4"
+            >
+              <svg
+                class="w-6 h-6 text-accent-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-white mb-2">View Data</h3>
+            <p class="text-gray-400">
+              Browse and analyze your existing data records with powerful
+              filtering and sorting.
+            </p>
+            <a
+              href="viewdata.html"
+              class="mt-4 inline-flex items-center text-accent-400 hover:text-accent-300 text-sm font-medium"
+            >
+              Explore data
+              <svg
+                class="w-4 h-4 ml-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </a>
+          </div>
+
+          <!-- Feature 2 -->
+          <div
+            class="bg-dark-700 border border-gray-700 rounded-xl p-6 sm:p-8 shadow-lg hover:shadow-xl transition-all hover:border-accent-500/30"
+          >
+            <div
+              class="w-12 h-12 bg-dark-600 rounded-lg flex items-center justify-center mb-4"
+            >
+              <svg
+                class="w-6 h-6 text-accent-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-white mb-2">Add New Data</h3>
+            <p class="text-gray-400">
+              Easily add new entries to your database with our intuitive form
+              interface.
+            </p>
+            <a
+              href="addnewdata.html"
+              class="mt-4 inline-flex items-center text-accent-400 hover:text-accent-300 text-sm font-medium"
+            >
+              Create records
+              <svg
+                class="w-4 h-4 ml-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </a>
+          </div>
+
+          <!-- Feature 3 -->
+          <div
+            class="bg-dark-700 border border-gray-700 rounded-xl p-6 sm:p-8 shadow-lg hover:shadow-xl transition-all hover:border-accent-500/30"
+          >
+            <div
+              class="w-12 h-12 bg-dark-600 rounded-lg flex items-center justify-center mb-4"
+            >
+              <svg
+                class="w-6 h-6 text-accent-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-white mb-2">Modify Data</h3>
+            <p class="text-gray-400">
+              Edit or update existing data records with precision and control.
+            </p>
+            <a
+              href="modifyingdata.html"
+              class="mt-4 inline-flex items-center text-accent-400 hover:text-accent-300 text-sm font-medium"
+            >
+              Update records
+              <svg
+                class="w-4 h-4 ml-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark-800 border-t border-gray-700 py-6 mt-auto">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="flex items-center">
+            <svg
+              class="h-6 w-6 text-accent-500 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"
+              />
+            </svg>
+            <span
+              class="text-lg font-semibold bg-gradient-to-r from-accent-400 to-primary-600 bg-clip-text text-transparent"
+              >DataMatrix</span
+            >
+          </div>
+          <div class="mt-4 md:mt-0 text-center md:text-right">
+            <p class="text-xs text-gray-400">
+              &copy; 2025 DataMatrix. All rights reserved.
+            </p>
+            <p class="text-xs text-gray-500 mt-1">v1.0.0</p>
+          </div>
+        </div>
+      </div>
     </footer>
   </body>
 </html>
