@@ -11,7 +11,7 @@ const port = 5000
   user: 'postgres',
   host: 'localhost',
   database: 'students',
-  password: 'murimi',
+  password: 'password2',
   port: 5432, // Default PostgreSQL port
 }) */
 
@@ -34,21 +34,75 @@ app.use(express.static('public')) // Serve static files (HTML, CSS, JS)
 
 // Route to handle form submission
 app.post('/submit', async (req, res) => {
-  const { name, email, age, dob } = req.body // Ensure field names match your HTML form
+  const { name, email, age, dob } = req.body
 
+  // Validate required fields
   if (!name || !email || !age || !dob) {
-    return res.status(400).send('Error: All fields are required')
+    return res.status(400).json({
+      success: false,
+      message: 'All fields are required',
+    })
+  }
+
+  // Validate email format
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json({
+      success: false,
+      message: 'Invalid email format',
+    })
+  }
+
+  // Validate age is a positive number
+  if (isNaN(age) || age <= 0) {
+    return res.status(400).json({
+      success: false,
+      message: 'Age must be a positive number',
+    })
   }
 
   try {
+    // Check if email already exists
+    const existingUser = await pool.query(
+      'SELECT * FROM students WHERE email = $1',
+      [email]
+    )
+
+    if (existingUser.rows.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email already exists',
+      })
+    }
+
+    // Insert new record
     const result = await pool.query(
       'INSERT INTO students (name, email, age, dob) VALUES ($1, $2, $3, $4) RETURNING *',
-      [name, email, age, dob]
+      [name, email, parseInt(age), dob]
     )
-    res.send('Data inserted successfully!')
+
+    res.json({
+      success: true,
+      message: 'Data inserted successfully!',
+      data: result.rows[0],
+    })
   } catch (err) {
-    console.error(err)
-    res.status(500).send('Database error occurred.')
+    console.error('Database error:', err)
+
+    // Handle specific database errors
+    let errorMessage = 'Database error occurred'
+    if (err.code === '23505') {
+      // Unique violation
+      errorMessage = 'Email already exists'
+    } else if (err.code === '22007') {
+      // Invalid datetime format
+      errorMessage = 'Invalid date format (use YYYY-MM-DD)'
+    }
+
+    res.status(500).json({
+      success: false,
+      message: errorMessage,
+      error: process.env.NODE_ENV === 'development' ? err.message : undefined,
+    })
   }
 })
 
@@ -131,7 +185,31 @@ app.put('/modify-data', async (req, res) => {
   }
 })
 
+// Search endpoint
+app.get('/search-users', async (req, res) => {
+  const query = req.query.query
+
+  if (!query || query.length < 3) {
+    return res.status(400).json({ error: 'Search query too short' })
+  }
+
+  try {
+    const results = await pool.query(
+      `SELECT * FROM students 
+       WHERE name ILIKE $1 OR email ILIKE $1
+       LIMIT 10`,
+      [`%${query}%`]
+    )
+
+    res.json(results.rows)
+  } catch (error) {
+    console.error('Search error:', error)
+    res.status(500).json({ error: 'Search failed' })
+  }
+})
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`)
 })
+
