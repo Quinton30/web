@@ -34,16 +34,16 @@ app.use(express.static('public')) // Serve static files (HTML, CSS, JS)
 
 // Route to handle form submission
 app.post('/submit', async (req, res) => {
-  const { name, email, age } = req.body // Ensure field names match your HTML form
+  const { name, email, age, dob } = req.body // Ensure field names match your HTML form
 
-  if (!name || !email || !age) {
+  if (!name || !email || !age || !dob) {
     return res.status(400).send('Error: All fields are required')
   }
 
   try {
     const result = await pool.query(
-      'INSERT INTO students (name, email, age) VALUES ($1, $2, $3) RETURNING *',
-      [name, email, age]
+      'INSERT INTO students (name, email, age, dob) VALUES ($1, $2, $3, $4) RETURNING *',
+      [name, email, age, dob]
     )
     res.send('Data inserted successfully!')
   } catch (err) {
