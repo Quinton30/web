@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modify Data</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-50 text-gray-800 font-sans">
+    <nav
+      class="bg-gray-800 text-white p-4 flex flex-wrap justify-between items-center shadow-lg"
+    >
+      <div class="text-xl font-semibold">Data Management</div>
+      <div class="flex flex-wrap space-x-4 mt-2 sm:mt-0">
+        <a href="index.html" class="hover:text-gray-300 transition">Home</a>
+        <a href="viewdata.html" class="hover:text-gray-300 transition"
+          >View Data</a
+        >
+        <a href="addnewdata.html" class="hover:text-gray-300 transition"
+          >Add New Data</a
+        >
+        <a href="modifyingdata.html" class="hover:text-gray-300 transition"
+          >Modify Data</a
+        >
+      </div>
+    </nav>
+
+    <div class="container mx-auto p-4 sm:p-6">
+      <h2 class="text-2xl sm:text-3xl font-bold text-center text-green-700 my-4 sm:my-6">
+        Modify User Data
+      </h2>
+
+      <!-- Dropdown to select user -->
+      <div class="max-w-full sm:max-w-md mx-auto mb-4 sm:mb-6"></div>
+        <label
+          for="userSelect"
+          class="block text-base sm:text-lg font-semibold mb-2 text-gray-700"
+        >
+          Select a User:
+        </label>
+        <select
+          id="userSelect"
+          class="block w-full p-2 sm:p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none"
+        >
+          <option value="">-- Select a User --</option>
+        </select>
+      </div>
+
+      <!-- Form to modify user -->
+      <form
+        id="modifyForm"
+        class="bg-white p-6 sm:p-8 rounded-lg shadow-lg max-w-full sm:max-w-md mx-auto border border-gray-200"
+      >
+        <input type="hidden" id="id" />
+        <div class="mb-4 sm:mb-6">
+          <label
+            for="name"
+            class="block text-base sm:text-lg font-semibold mb-2 text-gray-700"
+          >
+            New Name:
+          </label>
+          <input
+            type="text"
+            id="name"
+            placeholder="Enter new name"
+            required
+            class="block w-full p-2 sm:p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none"
+          />
+        </div>
+
+        <div class="mb-4 sm:mb-6">
+          <label
+            for="email"
+            class="block text-base sm:text-lg font-semibold mb-2 text-gray-700"
+          >
+            New Email:
+          </label>
+          <input
+            type="email"
+            id="email"
+            placeholder="Enter new email"
+            required
+            class="block w-full p-2 sm:p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none"
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="w-full bg-green-600 text-white py-2 sm:py-3 rounded-lg font-semibold hover:bg-green-700 transition duration-300 shadow-md"
+        >
+          Update
+        </button>
+      </form>
+    </div>
+
+    <script>
+      // Fetch and populate the dropdown
+      async function loadDropdown() {
+        try {
+          const response = await fetch(
+            'http://localhost:5000/get-distinct-users'
+          )
+          const users = await response.json()
+          const userSelect = document.getElementById('userSelect')
+
+          users.forEach((user) => {
+            const option = document.createElement('option')
+            option.value = user.id // Use ID as the value
+            option.textContent = user.name // Display name
+            userSelect.appendChild(option)
+          })
+        } catch (error) {
+          console.error('Error loading dropdown:', error)
+        }
+      }
+
+      // Fetch user details when selected
+      document
+        .getElementById('userSelect')
+        .addEventListener('change', async function () {
+          const selectedId = this.value
+          if (!selectedId) return
+
+          try {
+            const response = await fetch(
+              `http://localhost:5000/get-user-details?id=${encodeURIComponent(
+                selectedId
+              )}`
+            )
+            const userData = await response.json()
+
+            if (userData.error) {
+              alert(userData.error)
+              return
+            }
+
+            document.getElementById('id').value = userData.id
+            document.getElementById('name').value = userData.name
+            document.getElementById('email').value = userData.email
+          } catch (error) {
+            console.error('Error fetching user details:', error)
+          }
+        })
+
+      // Handle form submission for update
+      document
+        .getElementById('modifyForm')
+        .addEventListener('submit', async function (event) {
+          event.preventDefault()
+
+          const id = document.getElementById('id').value
+          const name = document.getElementById('name').value
+          const email = document.getElementById('email').value
+
+          if (!id) {
+            alert('Please select a user first.')
+            return
+          }
+
+          const response = await fetch('http://localhost:5000/modify-data', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id, name, email }),
+          })
+
+          const result = await response.json()
+          alert(
+            result.success
+              ? 'Data updated successfully!'
+              : 'Error: ' + result.error
+          )
+        })
+
+      // Load dropdown options on page load
+      window.onload = loadDropdown
+    </script>
+  </body>
+  <footer
+      class="text-center mt-auto py-4 text-white text-xs sm:text-sm bg-gray-900"
+    >
+      &copy; 2023 Data Management System. All rights reserved.
+      <br />
+    </footer>
+</html>
