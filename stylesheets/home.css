@@ -1,0 +1,52 @@
+body {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-color: white;
+    margin: 0;
+    padding: 0;
+}
+
+#grid-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    margin: 30px 0;
+    font-size: 2em;
+}
+
+/* Navigation Menu */
+.navbar {
+    background: white;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    margin: 0 10px;
+    background: #2563eb;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.navbar a:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+.navbar a:active {
+    transform: translateY(0);
+}
