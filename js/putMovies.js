@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        fetch(`http://localhost:3000/api/v1/movies/${movieId}`)
+        fetch(`https://app-tslo.onrender.com/api/v1/movies/${movieId}`)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error(`HTTP error! status: ${res.status}`);
@@ -120,7 +120,7 @@ formEl.addEventListener('submit', (event) => {
     submitBtn.disabled = true;
     submitBtn.textContent = 'Updating...';
 
-    fetch(`http://localhost:3000/api/v1/movies/${data.id}`, {
+    fetch(`https://app-tslo.onrender.com/api/v1/movies/${data.id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
