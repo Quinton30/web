@@ -36,7 +36,7 @@ document.getElementById('movieForm').addEventListener('submit', async (e) => {
     };
 
     try {
-        const response = await fetch('http://localhost:3000/api/v1/movies', {
+        const response = await fetch('https://app-tslo.onrender.com/api/v1/movies', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
