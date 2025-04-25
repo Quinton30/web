@@ -28,8 +28,66 @@ function showToast(type, message) {
     }, 100);
 }
 
+// Populate movie dropdown from API
+function populateMovieDropdown() {
+    const select = document.getElementById('id');
+    select.innerHTML = '<option value="">Loading movies...</option>';
+    fetch('https://app-tslo.onrender.com/api/v1/movies')
+        .then(res => res.json())
+        .then(movies => {
+            select.innerHTML = '<option value="">Select a movie</option>';
+            movies.forEach(movie => {
+                const option = document.createElement('option');
+                option.value = movie.id;
+                option.textContent = `${movie.title} (${movie.release_year})`;
+                select.appendChild(option);
+            });
+        })
+        .catch(() => {
+            select.innerHTML = '<option value="">Failed to load movies</option>';
+        });
+}
+
+// Populate the form fields with movie data
+function populateFormFields(movie) {
+    const titleInput = document.getElementById('title');
+    const genreInput = document.getElementById('genre');
+    const releaseYearInput = document.getElementById('release_year');
+    const directorInput = document.getElementById('director');
+    const ratingInput = document.getElementById('rating');
+    const submitBtn = document.querySelector('.submit-btn');
+
+    if (!movie) {
+        titleInput.value = '';
+        genreInput.value = '';
+        releaseYearInput.value = '';
+        directorInput.value = '';
+        ratingInput.value = '';
+        titleInput.disabled = true;
+        genreInput.disabled = true;
+        releaseYearInput.disabled = true;
+        directorInput.disabled = true;
+        ratingInput.disabled = true;
+        submitBtn.disabled = true;
+        return;
+    }
+
+    titleInput.value = movie.title || '';
+    genreInput.value = movie.genre || '';
+    releaseYearInput.value = movie.release_year || '';
+    directorInput.value = movie.director || '';
+    ratingInput.value = movie.rating || '';
+    titleInput.disabled = false;
+    genreInput.disabled = false;
+    releaseYearInput.disabled = false;
+    directorInput.disabled = false;
+    ratingInput.disabled = false;
+    submitBtn.disabled = false;
+}
+
 // Fetch movie data when the "Fetch Movie" button is clicked
 document.addEventListener('DOMContentLoaded', () => {
+    populateMovieDropdown();
     const fetchMovieBtn = document.getElementById('fetchMovieBtn');
     const idInput = document.getElementById('id');
     const titleInput = document.getElementById('title');
@@ -90,6 +148,30 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch((error) => {
                 console.error('Error fetching movie data:', error);
                 showToast('error', 'Failed to load movie data. Please check the ID.');
+            });
+    });
+
+    // Populate form when a movie is selected from dropdown
+    idInput.addEventListener('change', function() {
+        const movieId = idInput.value;
+        if (!movieId) {
+            populateFormFields(null);
+            return;
+        }
+        fetch(`https://app-tslo.onrender.com/api/v1/movies/${movieId}`)
+            .then(res => res.json())
+            .then(movie => {
+                if (!movie || !movie.id) {
+                    showToast('error', 'Movie not found.');
+                    populateFormFields(null);
+                    return;
+                }
+                populateFormFields(movie);
+                showToast('success', `Movie "${movie.title}" loaded successfully!`);
+            })
+            .catch(() => {
+                showToast('error', 'Failed to load movie data.');
+                populateFormFields(null);
             });
     });
 });
@@ -155,3 +237,4 @@ formEl.addEventListener('submit', (event) => {
             submitBtn.textContent = 'Update';
         });
 });
+
