@@ -31,16 +31,11 @@
         <h2>Edit Movie</h2>
         <form id="movieForm" class="form">
           <div class="mb-3">
-            <label for="id" class="form-label">Movie ID</label>
+            <label for="id" class="form-label">Movie</label>
             <div class="input-group">
-              <input
-                type="text"
-                id="id"
-                name="id"
-                class="form-control"
-                placeholder="Enter movie ID"
-                required
-              />
+              <select id="id" name="id" class="form-control" required>
+                <option value="">Loading movies...</option>
+              </select>
               <button type="button" id="fetchMovieBtn" class="btn btn-primary">
                 Fetch Movie
               </button>
